@@ -1,14 +1,23 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 // TODO: Expand program to allow the user to specify where the new file is stored.
 
 // We create a type called BYTE for an unsigned 8-bit integer.
 typedef uint8_t BYTE;
 
+struct stat st = {0};
+
 // In this program, we will be copying data from one file to another.
 int main(int argc, char *argv[])
 {
+    // We check if a directory exists, and if not, create it.
+    if (stat("./backups", &st) == -1) {
+        mkdir("./backups", 0700);
+    }
     // Instead of using "r" for read, we use "rb" for read binary. This is a pointer to our source file.
     // If we are dealing with binary data, like images, we must use this.
     FILE *src = fopen(argv[1], "rb");
